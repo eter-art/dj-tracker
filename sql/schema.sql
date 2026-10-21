@@ -50,3 +50,37 @@ CREATE TABLE tracks (
   genre_id INTEGER NOT NULL REFERENCES genres(id),
   UNIQUE (title, artist)
 );
+
+CREATE TABLE clubs (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  city_id INTEGER NOT NULL REFERENCES CITIES (id),
+  UNIQUE (name, city_id)
+);
+
+CREATE TABLE promoters (
+ id SERIAL PRIMARY KEY,
+ name VARCHAR (50) NOT NULL,
+ email VARCHAR(100),
+ instagram VARCHAR(50)
+);
+
+CREATE TABLE parties(
+ id SERIAL PRIMARY KEY,
+ name VARCHAR (50) NOT NULL UNIQUE,
+ instagram VARCHAR(50)
+);
+
+DROP TABLE bookings;
+
+CREATE TABLE bookings (
+  id SERIAL PRIMARY KEY,
+  club_id INTEGER NOT NULL REFERENCES clubs(id),
+  promoter_id INTEGER NOT NULL REFERENCES promoters(id),
+  booking_agent_id INTEGER NOT NULL REFERENCES booking_agents(id),
+  party_id INTEGER REFERENCES parties(id),
+  booking_date DATE NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'requested' CHECK(status IN('requested','confirmed', 'cancelled')),
+  fee NUMERIC(8, 2),
+  created_at TIMESTAMP DEFAULt NOW()
+);
