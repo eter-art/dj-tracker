@@ -84,3 +84,34 @@ CREATE TABLE bookings (
   fee NUMERIC(8, 2),
   created_at TIMESTAMP DEFAULt NOW()
 );
+
+CREATE TABLE sets (
+   id SERIAL PRIMARY KEY,
+   club_id INTEGER NOT NULL REFERENCES clubs(id),
+   genre_id INTEGER NOT NULL REFERENCES genres(id),
+   booking_id INTEGER REFERENCES bookings(id),
+   set_date DATE NOT NULL,
+   duration_minutes SMALLINT CHECK (duration_minutes > 0)
+);
+
+CREATE TABLE set_djs (
+   set_id INTEGER NOT NULL REFERENCES sets(id),
+   dj_id INTEGER NOT NULL REFERENCES djs(id),
+   PRIMARY KEY (set_id, dj_id)
+);
+
+CREATE TABLE set_tracks (
+   set_id INTEGER NOT NULL REFERENCES sets(id),
+   track_id INTEGER NOT NULL REFERENCES tracks(id),
+   position SMALLINT,
+   played_at TIME,
+   PRIMARY KEY (set_id, track_id)
+);
+
+
+CREATE TABLE availability (
+   id SERIAL PRIMARY KEY,
+   available_date DATE NOT NULL,
+   available_from TIME,
+   available_to TIME
+);
